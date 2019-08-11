@@ -32,6 +32,25 @@ def on_launch(event):
     welcome_message += game_info["questions"][0][0]
     return response_builder.build_json_response(welcome_message, card_text, card_title, reprompt_message, game_info, False)
 
+
+# TESTING choosing gamemode, rapid fire vs specific
+def on_launch(event):
+    welcome_message = "Welcome to Where In The World Europe edition! Do you want rapid fire mode or mastery mode?"
+    reprompt_message = "Try to get as many questions right as you can."
+    card_text = "Rapid faire or mastery mode?"
+    card_title = "Welcome to WhereInTheWorld!"
+
+    if USER_RESPONSE==RapidFire:
+        game_info = {"questions" : populate_game_questions("all"), "current_q_index" : 0, "score" : 0}
+        welcome_message += game_info["questions"][0][0]
+        return response_builder.build_json_response(welcome_message, card_text, card_title, reprompt_message, game_info, False)
+    else:
+        welcome_message="Which country would you like to master? England, France, or Germany?"
+
+        return response_builder.build_json_response(welcome_message, card_text, card_title, reprompt_message, game_info, False)
+
+
+
 def on_session_end():
     print("Session Ended.")
 
@@ -69,7 +88,15 @@ def handleDontKnowRequest(event):
 
 NUM_GAME_QUESTIONS = '5';
 
-def populate_game_questions():
+def populate_game_questions(mode):
+  """Build and return the list of questions for this game, no duplicates."""
+  indices = random.sample(range(0, len(quizquestion.questions_all)), 5) # If user doesn't specify, choose 5 random questions
+  return quizquestion.QuizQuestion.get_game_questions(indices)   
+
+print(populate_game_questions()) 
+
+#TESTING populate game questions with modes
+def populate_game_questions(mode):
   """Build and return the list of questions for this game, no duplicates."""
   indices = random.sample(range(0, len(quizquestion.questions_all)), 5) # If user doesn't specify, choose 5 random questions
   return quizquestion.QuizQuestion.get_game_questions(indices)   
