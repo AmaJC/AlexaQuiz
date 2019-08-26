@@ -45,4 +45,4 @@ with open('questions.csv') as csv_file:
             print(row[0], row[1])
             line_count += 1
         questions_all.append(QuizQuestion(row[0], row[1]))
-    print('Processed {0} lines.'.format(line_count))
+    # print('Processed {0} lines.'.format(line_count))
