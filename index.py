@@ -22,7 +22,11 @@ def on_launch():
     card_text = "Respond with your best guess for each question."
     card_title = "Welcome to WhereInTheWorld!"
 
-    session_attributes = {"questions" : populate_game_questions(), "current_q_index" : 0, "score" : 0}
+    session_attributes = {
+        "questions": populate_game_questions(), 
+        "current_q_index": 0, 
+        "score": 0
+    }
     welcome_message += session_attributes["questions"][0][0]
     return response_builder.build_json_response(welcome_message, card_text, card_title, reprompt_message, session_attributes, False)
 
@@ -51,7 +55,7 @@ def on_intent_request(event):
         session_attributes = event['session']['attributes']
         if not event['request']['intent']['slots']:
             # unrecognized answer
-            event['request']['intent']['slots'] = {"Answer" : ""}
+            event['request']['intent']['slots'] = {"Answer": ""}
             return handle_answer(event)
 
 def handle_answer(event):
@@ -66,7 +70,7 @@ def handle_answer(event):
     user_answer = event['request']['intent']['slots']['Answer']['value']
     game_questions = session_attributes['questions']
 
-    if user_answer == game_questions[curr_q_ind][1]:
+    if user_answer.upper() == game_questions[curr_q_ind][1].upper():
         session_attributes["score"] += 1
         result = "correct!"
     else:
