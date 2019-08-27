@@ -79,9 +79,14 @@ def handle_answer(event):
     session_attributes["current_q_index"] += 1
     if session_attributes["current_q_index"] < int(NUM_GAME_QUESTIONS):
         next_q = game_questions[curr_q_ind + 1][0]
-        answer_result = "{0} is {1}".format(user_answer, result)
         next_q_response = " Next question. {0}".format(next_q)
-        return response_builder.build_json_response(answer_result + next_q_response, next_q_response, "", next_q_response, session_attributes, False)
+
+        if result=="correct!":
+            answer_result = "{0} is {1}".format(user_answer, result)
+            return response_builder.build_json_response(answer_result + next_q_response, next_q_response, "", next_q_response, session_attributes, False)
+        else:
+            answer_result = "Incorrect! {0} is correct".format(game_questions[curr_q_ind][1].upper())
+            return response_builder.build_json_response(answer_result + next_q_response, next_q_response, "", next_q_response, session_attributes, False)
     else:
         score = session_attributes["score"]
         session_attributes["user_prompted_to_start"] = True
